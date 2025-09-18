@@ -283,32 +283,43 @@
     });
 
     renderGroups(catalog);
-  // ==== Буцах товч / history ====
-  const floatBack = document.getElementById('floatBack');
 
-  function showBack(show) {
-    if (floatBack) floatBack.style.display = show ? 'inline-flex' : 'none';
-  }
+// ==== Буцах товч / history ====
+const floatBack = document.getElementById('floatBack');
 
-  function goBack(e) {
-    if (e) e.preventDefault();
-    // Бүлгүүдийг буцааж харуулах
-    groupsEl.parentElement.style.display = 'block';
-    // Дэлгэрэнгүйг цэвэрлээд default мессэж гаргах
-    detailEl.innerHTML = '<div class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>';
-    // Буцах товчийг нуух
+function showBack(show) {
+  if (floatBack) floatBack.style.display = show ? 'inline-flex' : 'none';
+}
+
+function goBack(e) {
+  if (e) e.preventDefault();
+  // Бүлгүүдийг буцааж харуулах
+  groupsEl.parentElement.style.display = 'block';
+  // Дэлгэрэнгүйг цэвэрлээд default мессэж
+  detailEl.innerHTML = '<div class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>';
+  // Буцах товчийг нуух
+  showBack(false);
+  // Дээш гүйлгэх
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // (сонголтоор) history-г цэвэрлээд өгье
+  history.replaceState(null, '');
+}
+
+// Хөвөгч товч дээр дарвал
+floatBack?.addEventListener('click', goBack);
+
+// Утасны browser-ийн "←" товч дарвал
+window.addEventListener('popstate', goBack);
+
+// Responsive үед desktop-д буцах товчийг нууж, бүлгүүдийг үзүүлэх
+window.addEventListener('resize', () => {
+  if (!isSmall()) {
     showBack(false);
-    // Дээш гүйлгэх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    backBtn.style.display = 'none';
+    groupsEl.parentElement.style.display = 'block';
   }
+});
 
-  // Хөвөгч товч дээр дарвал
-  floatBack?.addEventListener('click', goBack);
-
-  // Утасны browser-н "←" товч дарвал
-  window.addEventListener('popstate', goBack);
-
-    window.addEventListener('resize', ()=>{ if(!isSmall()){ backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; } });
   </script>
 </body>
 </html>
