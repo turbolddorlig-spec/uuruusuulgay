@@ -283,7 +283,6 @@
     });
 
     renderGroups(catalog);
-<script>
   // ==== Буцах товч / history ====
   const floatBack = document.getElementById('floatBack');
 
@@ -308,7 +307,6 @@
 
   // Утасны browser-н "←" товч дарвал
   window.addEventListener('popstate', goBack);
-</script>
 
     window.addEventListener('resize', ()=>{ if(!isSmall()){ backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; } });
   </script>
