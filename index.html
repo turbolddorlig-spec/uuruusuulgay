@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>БҮХ ХИЧЭЭЛ — Каталог</title>
+  <meta name="description" content="Нэг файлтай, гар утсанд оновчтой каталог. Нууц кодоор хамгаалагдсан.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#f6fffb; --bg2:#ffffff; --ink:#0f172a; --muted:#5b6a81; --card:#ffffff; --border:#e6f0ea; --brand:#10b981; --brand2:#34d399; }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);
+      background:radial-gradient(900px 420px at 5% -10%, #dff9ec 0%, transparent 60%),radial-gradient(800px 420px at 110% -20%, #e9fff7 0%, transparent 55%),linear-gradient(180deg,var(--bg),var(--bg2) 50%,var(--bg));
+    }
+    a,button{ -webkit-tap-highlight-color: transparent; }
+    .wrap{max-width:1180px;margin:0 auto;padding:16px 16px 28px}
+    header{position:sticky;top:0;background:linear-gradient(180deg,var(--bg),#ffffffe6);backdrop-filter:saturate(140%) blur(6px);z-index:10;padding:10px 0 12px}
+    .head{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:42px;height:42px;border-radius:12px;background:radial-gradient(80% 80% at 50% 40%,var(--brand),rgba(16,185,129,.25));display:grid;place-items:center;box-shadow:0 8px 24px rgba(16,185,129,.22)}
+    .title{font-weight:800}
+    .search{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;flex:1;min-width:220px;max-width:460px}
+    .search input{all:unset;color:var(--ink);flex:1}
+    .note{font-size:12px;color:var(--muted)}
+    .section{margin-top:16px}
+    .sec-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 10px}
+    .grid{display:grid;gap:12px}
+    @media(min-width:600px){.grid-2{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:900px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:1120px){.grid-4{grid-template-columns:repeat(4,1fr)}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;transition:.18s ease;min-height:64px}
+    .card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(16,185,129,.08)}
+    .ic{width:44px;height:44px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:#f1f7f4;border:1px solid #d9ebe3;font-size:22px;flex:0 0 44px}
+    .ic img{width:100%;height:100%;object-fit:cover;display:block}
+    .card h3{font-size:16px;margin:0 0 2px;line-height:1.15}
+    .card p{font-size:13px;color:var(--muted);margin:0}
+    .btns{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:11px 13px;border-radius:12px;border:1px solid var(--border);text-decoration:none;font-size:14px;color:var(--ink);background:var(--card)}
+    .btn.fill{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#052b15;border-color:transparent;font-weight:800}
+    .tag{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted)}
+    .empty{opacity:.95;border:1px dashed var(--border);padding:18px;border-radius:12px;text-align:center}
+    dialog{border:none;border-radius:16px;padding:0;max-width:960px;width:calc(100% - 24px);background:var(--card);color:var(--ink);border:1px solid var(--border)}
+    .dlg-hd{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .dlg-ct{padding:10px}
+    .close{all:unset;cursor:pointer;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#f6fffb}
+    iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}
+    @media(max-width:480px){ dialog{max-width:none;width:100%} iframe{aspect-ratio:auto;height:60vh} }
+    footer{display:flex;justify-content:space-between;align-items:center;color:var(--muted);padding:18px 0;margin-top:14px;font-size:12px}
+
+    /* Passcode Gate (clean, minimal) */
+    #gate{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(246,255,251,.95),rgba(255,255,255,.98));backdrop-filter:saturate(140%) blur(8px);z-index:9999}
+    .panel{width:min(480px,calc(100% - 24px));background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px}
+    .panel h1{font-size:20px;margin:0 0 10px}
+    label{font-size:13px;color:var(--muted);display:block;margin:8px 0 6px}
+    input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+    .actions{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
+    .primary{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#052b15;font-weight:800;cursor:pointer}
+    .mini{font-size:12px;color:var(--muted);margin-top:6px}
+  </style>
+</head>
+<body>
+  <!-- Minimal pass gate -->
+  <div id="gate">
+    <div class="panel">
+      <h1>Нэвтрэх</h1>
+      <label>Нууц код</label>
+      <input id="pass" type="password" placeholder="••••••••" autocomplete="off">
+      <div class="actions">
+        <button id="enter" class="primary">Нэвтрэх</button>
+        <span id="status" class="mini"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="wrap" id="app" hidden>
+    <header>
+      <div class="head">
+        <div class="brand">
+          <div class="logo">💚</div>
+          <div>
+            <div class="title">БҮХ ХИЧЭЭЛ — Каталог</div>
+            <div class="note">Drive-ийнхээ structure-ийг яг тэр дарааллаар нь харуулна</div>
+          </div>
+        </div>
+        <label class="search"><span>🔎</span><input id="q" placeholder="Хайлт: AutoCAD, Word, Photoshop…"/></label>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="sec-head">
+        <h2>Бүлгүүд</h2>
+        <a href="#" id="backBtn" class="back" style="display:none">← Бүлгүүд рүү</a>
+      </div>
+      <div id="groups" class="grid grid-2 grid-3 grid-4"></div>
+    </section>
+
+    <section class="section">
+      <div class="sec-head">
+        <h2>Дэлгэрэнгүй</h2>
+        <span class="note">Бүлгээс сонгоод доор харах</span>
+      </div>
+      <div id="detail" class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>
+    </section>
+
+    <dialog id="dlg">
+      <div class="dlg-hd"><strong>Суулгах заавар (видео)</strong><button class="close" onclick="dlg.close()">Haх</button></div>
+      <div class="dlg-ct"><iframe id="player" allow="autoplay"></iframe></div>
+    </dialog>
+
+    <footer>
+      <small>© 2025 Танай нэр. Зөвхөн албан ёсны эх сурвалжийг дэмжинэ — пират контент байрлуулахгүй.</small>
+      <span class="tag">🧩 Нэг файлтай сайт</span>
+    </footer>
+  </div>
+
+  <script>
+    // ===== STATIC PASS CONFIG (no demo) =====
+    // 1) Generate hash using the separate offline tool (hashgen_offline.html)
+    // 2) Put the hash string(s) below and deploy.
+    const PASS_SALT = "change-me-2025-01"; // ← солиорой
+    const PASSLIST = [
+      // ЖИШЭЭГҮЙ. Offline hash генератораас гарсан утгаа энд нэмнэ.
+       "398bfe96171d41ce32decd262aa01d01d8278c6cf3f4c056b3dfe15c2345376c" , // түвшинсайхан
+
+       "389ed1d4224ddc3ca667346d72a8aac398a533ec965e42a4036054f625385e44"
+    ];
+
+    async function sha256Hex(text){
+      const buf = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    function allow(){ sessionStorage.setItem('access-ok','1'); document.getElementById('gate').style.display='none'; document.getElementById('app').hidden=false; }
+    async function tryLogin(pass){
+      if(!PASSLIST.length){ document.getElementById('status').textContent = "Түр хаалттай (код тохируулаагүй)"; return; }
+      const hash = await sha256Hex(PASS_SALT + pass);
+      if(PASSLIST.includes(hash)) { allow(); } else { document.getElementById('status').textContent = "Буруу нууц код"; }
+    }
+    if(sessionStorage.getItem('access-ok')==='1'){ allow(); }
+    document.getElementById('enter').addEventListener('click', ()=> tryLogin(document.getElementById('pass').value));
+    document.getElementById('pass').addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(e.target.value); });
+  </script>
+
+  <!-- === APP (catalog) === -->
+  <script>
+    const FALLBACK = {"AUTOCAD":"📐","WORD EXCEL":"🧩","3DMAX":"🧱","AFTER EFFECT":"✨","COREL DRAW":"🎨","ILLUSTRATOR":"✒️","INDESIGN":"📰","LUMION":"🏙️","PHOTOSHOP":"🖼️","PREMIERE PRO":"🎬","REVIT":"🏗️","SKETCHUP":"📦","SOLIDWORKS":"⚙️"};
+
+    // Catalog with user's data (logos + guides + download links)
+    const catalog = [
+      { title: "1. AUTOCAD", icon: "https://i.postimg.cc/RqhSY4d2/autocad.png", items: [
+        { name: "AutoCAD татах", guides: [], official: [{label:"Autodesk", url:"https://www.autodesk.com/products/autocad/"}] }
+      ]},
+      { title: "2. WORD EXCEL", icon: "https://i.postimg.cc/FYMpMr0p/word-excel.png", items: [
+        { name: "Word Excel", guides: [
+          "https://drive.google.com/file/d/1QegakpP-2YhrMZ30k9YqP_68CrPZdrjq/view?usp=drive_link"
+        ], official: [
+          { label:"Татах", url:"https://drive.google.com/file/d/1D5LFEoCX3Yr03LLHdZ7cy_jrvo0LHi-s/view?usp=drive_link" }
+        ]}
+      ]},
+      { title: "3. 3DMAX", icon: "https://i.postimg.cc/5HW5PPMk/3dmax.png", items: [
+        { name: "3ds Max татах", guides: [], official: [] }
+      ]},
+      { title: "AFTER EFFECT", icon: "https://i.postimg.cc/8scvb86z/after-effect.png", items: [
+        { name: "After Effects", guides: [
+          "https://drive.google.com/file/d/10EU0MVZxq0Q23nhVoarR7sEdYnBqCFZB/view?usp=drive_link"
+        ], official: [
+          { label:"Татах", url:"https://drive.google.com/file/d/1R0e_HNfVfb0we_6KXUlScchbtUWBo-UW/view?usp=drive_link" }
+        ]}
+      ]},
+      { title: "COREL DRAW", icon: "https://i.postimg.cc/zyCHf890/coreldraw.png", items: [
+        { name: "CorelDraw татах", guides: [], official: [] }
+      ]},
+      { title: "ILLUSTRATOR", icon: "https://i.postimg.cc/v4sDkCc9/illustrator.png", items: [
+        { name: "Illustrator", guides: [
+          "https://drive.google.com/file/d/1iANbecOi-g9ikGtZdvK-m5gs0ohRQJ_p/view?usp=drive_link"
+        ], official: [
+          { label:"Татах", url:"https://drive.google.com/file/d/1CA3gVyp-bq-2bj5URw3HUFGmAvзCcYa2/view?usp=sharing".replace('з','z') }
+        ]}
+      ]},
+      { title: "INDESIGN", icon: "https://i.postimg.cc/Cd8h0my4/indesign.png", items: [
+        { name: "InDesign татах", guides: [], official: [] }
+      ]},
+      { title: "Lumion", icon: "https://i.postimg.cc/QKZrVZLJ/lumion.png", items: [
+        { name: "Lumion татах", guides: [], official: [] }
+      ]},
+      { title: "PHOTOSHOP", icon: "https://i.postimg.cc/3d7TThFK/photoshop.png", items: [
+        { name: "Photoshop татах", guides: [], official: [] }
+      ]},
+      { title: "Premiere Pro", icon: "https://i.postimg.cc/WqvQTmr9/premiere.png", items: [
+        { name: "Premiere Pro татах", guides: [], official: [] }
+      ]},
+      { title: "REVIT", icon: "https://i.postimg.cc/2qLJW97c/revit.png", items: [
+        { name: "Revit татах", guides: [], official: [] }
+      ]},
+      { title: "SKETCHUP", icon: "https://i.postimg.cc/bdRzddJG/sketchup.png", items: [
+        { name: "SketchUp татах", guides: [], official: [] }
+      ]},
+      { title: "Solidworks", icon: "https://i.postimg.cc/sQ4RB0VF/solidworks.png", items: [
+        { name: "Solidworks татах", guides: [], official: [] }
+      ]}
+    ];
+
+    function driveEmbedUrl(url){
+      try{
+        const u = new URL(url);
+        let id = null;
+        const m = u.pathname.match(/\/file\/d\/([^/]+)/);
+        if(m) id = m[1];
+        if(!id) id = u.searchParams.get('id');
+        return id ? `https://drive.google.com/file/d/${id}/preview` : null;
+      }catch(e){return null}
+    }
+
+    function iconMarkup(group){
+      const url = group.icon;
+      const emoji = FALLBACK[group.title.replace(/[0-9. ]/g,'').toUpperCase()] || '📁';
+      if(!url) return `<span>${emoji}</span>`;
+      return `<img src="${url}" alt="logo" onerror="this.style.display='none'; this.parentElement.textContent='${emoji}'" />`;
+    }
+
+
+    const groupsEl=document.getElementById('groups');
+    const detailEl=document.getElementById('detail');
+    const backBtn=document.getElementById('backBtn');
+    const q=document.getElementById('q');
+    const dlg=document.getElementById('dlg');
+    const player=document.getElementById('player');
+
+    function isSmall(){ return window.innerWidth < 720 }
+
+    function renderGroups(list){
+      groupsEl.innerHTML='';
+      list.forEach((g,idx)=>{
+        const el=document.createElement('button');
+        el.className='card'; el.style.cursor='pointer'; el.style.textAlign='left';
+        el.innerHTML=`<div class=\"ic\">${iconMarkup(g)}</div><div><h3>${g.title}</h3><p>${(g.items||[]).length} зүйл</p></div>`;
+        el.onclick=()=>renderDetail(idx);
+        groupsEl.appendChild(el);
+      });
+    }
+
+    function renderDetail(idx){
+      const g=catalog[idx];
+      if(!g){ detailEl.innerHTML='<div class=\"empty\">Сонгосон бүлэг олдсонгүй</div>'; return; }
+      const box=document.createElement('div'); box.className='grid grid-2 grid-3';
+      (g.items||[]).forEach(it=>{
+        const card=document.createElement('div'); card.className='card';
+        card.innerHTML=`<div class=\"ic\">${iconMarkup(g)}</div>
+          <div style=\"flex:1\">
+            <h3>${it.name}</h3>
+            <p class=\"note\">Заавар ба татах холбоосууд</p>
+            <div class=\"btns\"></div>
+          </div>`;
+        const btns=card.querySelector('.btns');
+        (it.guides||[]).forEach((u,i)=>{
+          const a=document.createElement('a'); a.href='#'; a.className='btn'; a.textContent=`🎥 Заавар ${i+1}`;
+          a.onclick=(e)=>{ e.preventDefault(); const pv=driveEmbedUrl(u); if(pv){ player.src=pv; dlg.showModal(); } };
+          btns.appendChild(a);
+        });
+        if((it.guides||[]).length===0){ const s=document.createElement('span'); s.className='tag'; s.textContent='🎥 Заавар нэмэх'; btns.appendChild(s); }
+        (it.official||[]).forEach(o=>{ const a=document.createElement('a'); a.href=o.url; a.target='_blank'; a.rel='nofollow noopener'; a.className='btn fill'; a.innerHTML='⭳ '+(o.label||'Татах'); btns.appendChild(a); });
+        box.appendChild(card);
+      });
+      detailEl.innerHTML=''; detailEl.appendChild(box);
+
+      if(isSmall()){ groupsEl.parentElement.style.display='none'; backBtn.style.display='inline-flex'; detailEl.scrollIntoView({behavior:'smooth'}); }
+      else { backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; }
+    }
+
+    backBtn?.addEventListener('click',(e)=>{ e.preventDefault(); groupsEl.parentElement.style.display='block'; backBtn.style.display='none'; detailEl.innerHTML='<div class=\"empty\">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>'; window.scrollTo({top:0,behavior:'smooth'}); });
+
+    q.addEventListener('input',()=>{
+      const t=q.value.trim().toLowerCase();
+      const filtered = t? catalog.filter(g=> g.title.toLowerCase().includes(t) || g.items.some(it=> it.name.toLowerCase().includes(t))) : catalog;
+      renderGroups(filtered);
+    });
+
+    renderGroups(catalog);
+    window.addEventListener('resize', ()=>{ if(!isSmall()){ backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; } });
+  </script>
+</body>
+</html>
+
