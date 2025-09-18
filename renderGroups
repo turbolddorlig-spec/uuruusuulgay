@@ -101,8 +101,10 @@
     <section class="section">
       <div class="sec-head">
         <h2>Дэлгэрэнгүй</h2>
-        <a id="floatBack" href="#" style="display:none;position:fixed;right:14px;bottom:14px;border:1px solid #e6f0ea;background:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:50;">
-  ← Буцах
+        <a id="floatBack" href="#"
+   style="display:none;position:fixed;right:14px;bottom:14px;border:1px solid #e6f0ea;
+          background:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;
+          box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:50;">← Буцах</a>
 </a>
         <span class="note">Бүлгээс сонгоод доор харах</span>
       </div>
