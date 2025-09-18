@@ -101,6 +101,9 @@
     <section class="section">
       <div class="sec-head">
         <h2>Дэлгэрэнгүй</h2>
+        <a id="floatBack" href="#" style="display:none;position:fixed;right:14px;bottom:14px;border:1px solid #e6f0ea;background:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:50;">
+  ← Буцах
+</a>
         <span class="note">Бүлгээс сонгоод доор харах</span>
       </div>
       <div id="detail" class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>
@@ -280,6 +283,33 @@
     });
 
     renderGroups(catalog);
+<script>
+  // ==== Буцах товч / history ====
+  const floatBack = document.getElementById('floatBack');
+
+  function showBack(show) {
+    if (floatBack) floatBack.style.display = show ? 'inline-flex' : 'none';
+  }
+
+  function goBack(e) {
+    if (e) e.preventDefault();
+    // Бүлгүүдийг буцааж харуулах
+    groupsEl.parentElement.style.display = 'block';
+    // Дэлгэрэнгүйг цэвэрлээд default мессэж гаргах
+    detailEl.innerHTML = '<div class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>';
+    // Буцах товчийг нуух
+    showBack(false);
+    // Дээш гүйлгэх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Хөвөгч товч дээр дарвал
+  floatBack?.addEventListener('click', goBack);
+
+  // Утасны browser-н "←" товч дарвал
+  window.addEventListener('popstate', goBack);
+</script>
+
     window.addEventListener('resize', ()=>{ if(!isSmall()){ backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; } });
   </script>
 </body>
