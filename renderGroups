@@ -101,11 +101,11 @@
     <section class="section">
       <div class="sec-head">
         <h2>Дэлгэрэнгүй</h2>
+        <!-- Хөвөгч буцах товч (зөвхөн дэлгэрэнгүй үед харагдана) -->
         <a id="floatBack" href="#"
-   style="display:none;position:fixed;right:14px;bottom:14px;border:1px solid #e6f0ea;
-          background:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;
-          box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:50;">← Буцах</a>
-</a>
+           style="display:none;position:fixed;right:14px;bottom:14px;border:1px solid #e6f0ea;
+                  background:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;
+                  box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:50;">← Буцах</a>
         <span class="note">Бүлгээс сонгоод доор харах</span>
       </div>
       <div id="detail" class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>
@@ -124,13 +124,9 @@
 
   <script>
     // ===== STATIC PASS CONFIG (no demo) =====
-    // 1) Generate hash using the separate offline tool (hashgen_offline.html)
-    // 2) Put the hash string(s) below and deploy.
     const PASS_SALT = "change-me-2025-01"; // ← солиорой
     const PASSLIST = [
-      // ЖИШЭЭГҮЙ. Offline hash генератораас гарсан утгаа энд нэмнэ.
-       "398bfe96171d41ce32decd262aa01d01d8278c6cf3f4c056b3dfe15c2345376c" , // түвшинсайхан
-
+       "398bfe96171d41ce32decd262aa01d01d8278c6cf3f4c056b3dfe15c2345376c", // түвшинсайхан
        "389ed1d4224ddc3ca667346d72a8aac398a533ec965e42a4036054f625385e44"
     ];
 
@@ -171,7 +167,7 @@
       ]},
       { title: "AFTER EFFECT", icon: "https://i.postimg.cc/8scvb86z/after-effect.png", items: [
         { name: "After Effects", guides: [
-          "https://drive.google.com/file/d/10EU0MVZxq0Q23nhVoarR7sEdYnBqCFZB/view?usp=drive_link"
+          "https://drive.google.com/file/d/10EU0MVZxq0Q23nhVoarR7sEdYnBqCFЗB/view?usp=drive_link".replace('З','Z')
         ], official: [
           { label:"Татах", url:"https://drive.google.com/file/d/1R0e_HNfVfb0we_6KXUlScchbtUWBo-UW/view?usp=drive_link" }
         ]}
@@ -227,7 +223,6 @@
       return `<img src="${url}" alt="logo" onerror="this.style.display='none'; this.parentElement.textContent='${emoji}'" />`;
     }
 
-
     const groupsEl=document.getElementById('groups');
     const detailEl=document.getElementById('detail');
     const backBtn=document.getElementById('backBtn');
@@ -272,11 +267,22 @@
       });
       detailEl.innerHTML=''; detailEl.appendChild(box);
 
-      if(isSmall()){ groupsEl.parentElement.style.display='none'; backBtn.style.display='inline-flex'; detailEl.scrollIntoView({behavior:'smooth'}); }
-      else { backBtn.style.display='none'; groupsEl.parentElement.style.display='block'; }
+      if(isSmall()){
+        groupsEl.parentElement.style.display='none';
+        backBtn.style.display='inline-flex';
+        // ШИНЭ: хөвөгч буцах товч ба history
+        showBack(true);
+        history.pushState({ d: 1 }, "");
+        detailEl.scrollIntoView({behavior:'smooth'});
+      } else {
+        backBtn.style.display='none';
+        groupsEl.parentElement.style.display='block';
+        showBack(false);
+      }
     }
 
-    backBtn?.addEventListener('click',(e)=>{ e.preventDefault(); groupsEl.parentElement.style.display='block'; backBtn.style.display='none'; detailEl.innerHTML='<div class=\"empty\">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>'; window.scrollTo({top:0,behavior:'smooth'}); });
+    // backBtn дээр дарвал — нэг л функц дуудах
+    backBtn?.addEventListener('click',(e)=>{ e.preventDefault(); goBack(); });
 
     q.addEventListener('input',()=>{
       const t=q.value.trim().toLowerCase();
@@ -286,43 +292,34 @@
 
     renderGroups(catalog);
 
-// ==== Буцах товч / history ====
-const floatBack = document.getElementById('floatBack');
+    // ==== Буцах товч / history ====
+    const floatBack = document.getElementById('floatBack');
 
-function showBack(show) {
-  if (floatBack) floatBack.style.display = show ? 'inline-flex' : 'none';
-}
+    function showBack(show) {
+      if (floatBack) floatBack.style.display = show ? 'inline-flex' : 'none';
+    }
 
-function goBack(e) {
-  if (e) e.preventDefault();
-  // Бүлгүүдийг буцааж харуулах
-  groupsEl.parentElement.style.display = 'block';
-  // Дэлгэрэнгүйг цэвэрлээд default мессэж
-  detailEl.innerHTML = '<div class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>';
-  // Буцах товчийг нуух
-  showBack(false);
-  // Дээш гүйлгэх
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  // (сонголтоор) history-г цэвэрлээд өгье
-  history.replaceState(null, '');
-}
+    function goBack(e) {
+      if (e) e.preventDefault();
+      groupsEl.parentElement.style.display = 'block';
+      detailEl.innerHTML = '<div class="empty">↑ Дээрх жагсаалтаас бүлэг сонгоно уу</div>';
+      showBack(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      history.replaceState(null, '');
+      backBtn.style.display='none';
+    }
 
-// Хөвөгч товч дээр дарвал
-floatBack?.addEventListener('click', goBack);
+    floatBack?.addEventListener('click', goBack);
+    window.addEventListener('popstate', goBack);
 
-// Утасны browser-ийн "←" товч дарвал
-window.addEventListener('popstate', goBack);
-
-// Responsive үед desktop-д буцах товчийг нууж, бүлгүүдийг үзүүлэх
-window.addEventListener('resize', () => {
-  if (!isSmall()) {
-    showBack(false);
-    backBtn.style.display = 'none';
-    groupsEl.parentElement.style.display = 'block';
-  }
-});
-
+    // Responsive үед desktop-д буцах товчийг нууж, бүлгүүдийг үзүүлэх
+    window.addEventListener('resize', () => {
+      if (!isSmall()) {
+        showBack(false);
+        backBtn.style.display = 'none';
+        groupsEl.parentElement.style.display = 'block';
+      }
+    });
   </script>
 </body>
 </html>
-
